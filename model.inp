@@ -1,0 +1,12 @@
+
+AddAtmosModel &gammalabel
+  AtmIdent MyModelIDStr
+  AtmName My atmospheric model
+  AtmDefault GAMMA GrdTemp 300 K
+  AddLayer	0 m	800.0 m	MatchDefault 	1.2184 kg/m3
+  AddLayer	800.0 m	4 km	1.2184 kg/m3	0.8422 kg/m3
+  AddLayer	4 km	12 km	0.8422 kg/m3	0.2765 kg/m3
+  AddLayer	12 km	35 km	0.2765 kg/m3	6.4846e-06 g/cm3
+  AddLayer	35 km	100 km	6.4846e-06 g/cm3	MatchDefault 
+
+&gammalabel

@@ -1,0 +1,35 @@
+#
+# File travel_TTs.inp: Input file included from "travel_TT.inp"
+#
+#------------------------------------------------------------------------------
+#
+# These are some output control statements.
+#
+LaTeX  # Use this if your printer is a laser printer and you don't like the
+       # appearance of plain text file hard copies.
+#
+StackInfo  # To see stack usage (rather technical stuff).
+OutputListing Full  # More technical stuff.
+#
+TableIndex # Use this directive once, hard copy the resulting listing and
+           # keep it at hand. It is useful for reference.
+
+# ====== Energy distribution at ground  ====== #
+
+PrintTable 2505  # Gamma rays.
+PrintTable 2507  # Muons (+).
+PrintTable 2508  # Muons (-).
+PrintTable 2501  # Gamma rays.
+#
+Skip &next
+ExportTable 2793 Opt ML
+ExportTable 5501
+ExportTable 7905
+&next
+#
+ExportTable 2505  # Gamma rays.
+ExportTable 2507  # Muons (+).
+ExportTable 2508  # Muons (-).
+ExportTable 2501  # Gamma rays.
+#
+ELimsTables 1 MeV 1 TeV

@@ -1,0 +1,61 @@
+#
+# File travel_TT.inp
+#
+#------------------------------------------------------------------------------
+
+# Remarks will appear in the summary file. The "Remark" directive can be
+# abbreviated and has two alternative forms:
+
+Remark		SIMULATION WITH TEMPERATURES	# 1.- Single-line remarks.
+
+Rem &eor					# 2.- Multi-line remarks.
+
+This is a first example of an input file for AIRES.
+I'm trying to learn how to use AIRES, because it's important for us.
+&eor
+
+Task learn1  # Use "Task learn1 5" to explicitly set task version to 5.
+
+# The following directives are mandatory (have no default values)
+# Look that TAB characters can also be used in place of blanks.
+
+TotalShowers		1000
+PrimaryParticle	proton
+PrimaryEnergy		1 PeV        # Gamma factor 1.7 as default:
+                                    #       - (1 + 1.7) = -2.7
+
+# All other parameters will be assigned a default value if not set.
+
+RunsPerProcess 5    # You will understand these directives when running
+ShowersPerRun  200  # the program (see the user's manual).
+
+Thinning   50 GeV  # Absolute as well as Relative specifications allowed.
+
+Ground     1000 g/cm2  # Most quantities are specified by two fields:
+                       # "number" and "unit". In this case "unit" can be
+                       # g/cm2, cm, m or km
+#
+# You can freely set the number of observing levels to record the shower
+# longitudinal development. You can define up to 510 observing levels and
+# (optionally) altitude of the highest and lowest levels.
+
+ObservingLevels 41 100 g/cm2 900 g/cm2  # Num Levels, First & Last obs. Levels.
+
+# Threshold energies. Particles are not followed below these energies.
+
+#                 HANS VALUES     DEFAULT VALUES
+GammaCutEnergy     100 keV     #      200 MeV
+ElectronCutEnergy   50 keV     #      200 MeV
+MuonCutEnergy        1 MeV     #        1 MeV
+MesonCutEnergy     1.5 MeV
+NuclCutEnergy      150 MeV
+
+# Inclusion of other input files:
+
+Input model.inp
+
+Input travel_TTs.inp  # TABLES
+
+End
+
+
