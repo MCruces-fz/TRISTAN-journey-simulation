@@ -54,7 +54,7 @@ NuclCutEnergy      150 MeV
 
 Input model.inp
 
-Input travel_TTs.inp  # TABLES
+Input tables.inp  # TABLES
 
 End
 

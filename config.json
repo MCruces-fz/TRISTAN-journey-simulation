@@ -1,0 +1,14 @@
+{
+    "model": {
+        "atm_ident": "MyModelIDStr",
+        "atm_name": "My atmospheric model",
+        "grd_temp": 300
+    },
+    "template": {
+        "task_name": "task2",
+        "total_showers": 10,
+        "primary_particle": "proton",
+        "primary_energy": "1 PeV",
+        "observing_levels": 41
+    }
+}

@@ -1,0 +1,59 @@
+#------------------------------------------------------------------------------
+#
+# File {task_name}.inp
+#
+#------------------------------------------------------------------------------
+
+Task {task_name}
+
+Remark    SPECTRUM OF ENERGIES ({task_name})
+
+Rem &eor
+
+This is a first example of an input file for AIRES.
+I'm trying to learn how to use AIRES, because it's important for us.
+
+&eor
+
+#--------------- MANDATORY DIRECTIVES (have no default values) ----------------
+
+TotalShowers        {total_showers}
+PrimaryParticle     {primary_particle}
+PrimaryEnergy       {primary_energy}
+# Gamma factor 1.7 as default: - (1 + 1.7) = -2.7
+
+#--------------------------- OPTIONAL DIRECTIVES  -----------------------------
+
+RunsPerProcess 5    # You will understand these directives when running
+ShowersPerRun  2    # the program (see the user's manual).
+
+Thinning   50 GeV  # Absolute as well as Relative specifications allowed.
+
+Ground     1000 g/cm2  # Most quantities are specified by two fields:
+                       # "number" and "unit". In this case "unit" can be
+                       # g/cm2, cm, m or km
+
+ObservingLevels {observing_levels} # 100 g/cm2 900 g/cm2
+# Num Levels, First & Last obs. Levels.
+
+# Threshold energies. Particles are not followed below these energies.
+
+#                 HANS VALUES     DEFAULT VALUES
+GammaCutEnergy     100 keV     #      200 MeV
+ElectronCutEnergy   50 keV     #      200 MeV
+MuonCutEnergy        1 MeV     #        1 MeV
+MesonCutEnergy     1.5 MeV
+NuclCutEnergy      150 MeV
+
+#------------------------------- INPUT FILES  ---------------------------------
+
+input model.inp
+
+Input tables.inp  # TABLES
+
+
+###########
+### END ###
+###########
+
+End
