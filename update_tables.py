@@ -1,32 +1,48 @@
+"""
+Author: Miguel Cruces
+e-mails:
+- miguel.cruces.fernandez@usc.es
+- mcsquared.fz@gmail.com
+"""
+
+import json
+import os
+from os.path import join as join_path
+
+# Root Directory of the Project
+ROOT_DIR = os.path.abspath("./")
 
 
 class CookTables:
-    def __init__(self, chosen_tables: list = None):
-        self.table_ids = {
-            "electron": 2505,
-            "muon+": 2507,
-            "muon-": 2508,
-            "gamma": 2501
-        }
-        if chosen_tables is None:
-            chosen_tables = ["gamma", "electron", "muon+", "muon-"]
+    def __init__(self, print_ids: list = None, export_ids: list = None, save_path=None):
+        # self.table_ids = {
+        #     "electron": 2505,
+        #     "muon+": 2507,
+        #     "muon-": 2508,
+        #     "gamma": 2501
+        # }
+        if print_ids is None:
+            print_ids = [2501, 2505, 2507, 2508]
+        if export_ids is None:
+            export_ids = [2501, 2505, 2507, 2508]
 
-        print_tables = self.set_print(chosen_tables)
-        export_tables = self.set_export(chosen_tables)
+        print_tables = self.set_print(print_ids)
+        export_tables = self.set_export(export_ids)
 
-        self. input_tables = self.set_tables(print_tables, export_tables)
-        self.save_tables()
+        self.input_tables = self.set_tables(print_tables, export_tables)
+        self.save_tables(save_path)
 
     def set_export(self, chosen_tables):
         export_tables = ""
         for table in chosen_tables:
-            export_tables += f"ExportTable {self.table_ids[table]}   # {table}\n"
+            export_tables += f"ExportTable {table}\n"
         return export_tables
 
     def set_print(self, chosen_tables):
         print_tables = ""
         for table in chosen_tables:
-            print_tables += f"PrintTable {self.table_ids[table]}    # {table}\n"
+            # print_tables += f"PrintTable {self.table_ids[table]}    # {table}\n"
+            print_tables += f"PrintTable {table}\n"
         return print_tables
 
     def set_tables(self, print_tables, export_tables):
@@ -44,17 +60,21 @@ class CookTables:
                       "TableIndex # Use this directive once, hard copy the resulting listing and\n" \
                       "           # keep it at hand. It is useful for reference.\n" \
                       "\n" \
-                      "#---------------------- ENERGY DISTRIBUTION AT GROUND -------------------------\n"\
+                      "#---------------------- ENERGY DISTRIBUTION AT GROUND -------------------------\n" \
                       "\n" \
-                      f"{print_tables}"\
+                      f"{print_tables}" \
                       "\n" \
-                      f"{export_tables}"\
+                      f"{export_tables}" \
                       "\n" \
                       "ELimsTables 1 MeV 1 TeV"
         return text_tables
 
-    def save_tables(self):
-        with open('tables.inp', 'w+') as f:
+    def save_tables(self, save_path):
+        if save_path is not None:
+            save_in = save_path
+        else:
+            save_in = ROOT_DIR
+        with open(join_path(save_in, 'tables.inp'), 'w+') as f:
             f.write(self.input_tables)
 
 

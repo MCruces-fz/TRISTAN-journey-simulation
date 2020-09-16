@@ -47,7 +47,7 @@ NuclCutEnergy      150 MeV
 
 #------------------------------- INPUT FILES  ---------------------------------
 
-input model.inp
+input model.inp   # ATMOSPHERIC MODEL
 
 Input tables.inp  # TABLES
 

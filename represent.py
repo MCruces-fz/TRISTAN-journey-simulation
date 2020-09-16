@@ -1,10 +1,16 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import json
+import os
+from os.path import join as join_path
+
+# Root Directory of the Project
+ROOT_DIR = os.path.abspath("./")
 
 
 class CookingDataAIRES:
-    def __init__(self, file: str = 'learn1.t2505'):
+    def __init__(self, in_path="./", file: str = 'learn1.t2505'):
         # Initialize constants
         self.file_name = file
         self.table_name = ''
@@ -15,11 +21,11 @@ class CookingDataAIRES:
         self.data_frame = None
 
         # Invoke functions
-        self.read_data()
+        self.read_data(in_path)
         self.energy_units(_to='MeV')
 
-    def read_data(self):
-        with open(self.file_name, 'r') as f:
+    def read_data(self, in_path):
+        with open(join_path(in_path, self.file_name), 'r') as f:
             lin = f.readlines()
             lines = list(map(lambda s: s.strip(), lin))
             data = []
@@ -97,7 +103,7 @@ class MergeData:
 
 
 class Represent:
-    def __init__(self, cook):
+    def __init__(self, cook, out_path="./", task_name="task"):
         # Initialize constants
         # self.file_name = cook.file_name
         self.table_name = cook.table_name
@@ -107,41 +113,51 @@ class Represent:
         self.col_titles = cook.col_titles
         self.data_frame = cook.data_frame
 
+        with open("config.json", "r") as config_file:
+            configuration = json.load(config_file)
+        self.config = configuration
+
         # Invoke functions
-        self.diagram()
+        self.diagram(out_path=out_path, task_name=task_name)
         # self.histogram()
 
-    def diagram(self):
+    def diagram(self, out_path="./", task_name="task"):
+        conf = self.config["plots"]
+
         table, title, particle = self.table_name.split(': ')
-        fig = plt.figure(table)
+        fig = plt.figure(f"{table}_{task_name}")
         ax = fig.add_subplot()
         plt.title(f'{title}: {particle}')
 
         x = self.data_frame['Energy']
+        y = self.data_frame['Mean']
 
         # Mean
-        y = self.data_frame['Mean']
-        plt.plot(x, y, color='#000000', label='Particles at Ground.')
-        ax.fill_between(x=x, y1=y, y2=0, color='#00B5B8', alpha=0.3)
+        if conf["mean"]:
+            plt.plot(x, y, color='#000000', label='Particles at Ground.')
+            ax.fill_between(x=x, y1=y, y2=0, color='#00B5B8', alpha=0.3)
 
         # Minimum and Maximum
-        # ymin = self.data_frame['Minimum']
-        # ymax = self.data_frame['Maximum.']
-        # plt.plot(x, ymin, color='#74508D', alpha=0.25)
-        # plt.plot(x, ymax, color='#74508D', alpha=0.25)
-        # ax.fill_between(x=x, y1=ymin, y2=ymax, color='#74508D', alpha=0.3, label='Maximum and Minimum.')
+        if conf["minimum_and_maximum"]:
+            ymin = self.data_frame['Minimum']
+            ymax = self.data_frame['Maximum.']
+            plt.plot(x, ymin, color='#74508D', alpha=0.25)
+            plt.plot(x, ymax, color='#74508D', alpha=0.25)
+            ax.fill_between(x=x, y1=ymin, y2=ymax, color='#74508D', alpha=0.3, label='Maximum and Minimum.')
 
         # Std. Dev.
-        ystd = self.data_frame['Std. Dev.'] / 2
-        plt.plot(x, y - ystd, color='#ED177A', alpha=0.5)
-        plt.plot(x, y + ystd, color='#ED177A', alpha=0.5)
-        ax.fill_between(x=x, y1=y - ystd, y2=y + ystd, color='#ED177A', alpha=0.2, label='Std. Dev.')
+        if conf["standard_deviation"]:
+            ystd = self.data_frame['Std. Dev.'] / 2
+            plt.plot(x, y - ystd, color='#ED177A', alpha=0.5)
+            plt.plot(x, y + ystd, color='#ED177A', alpha=0.5)
+            ax.fill_between(x=x, y1=y - ystd, y2=y + ystd, color='#ED177A', alpha=0.2, label='Std. Dev.')
 
         # RMS Error.
-        yrms = self.data_frame['RMS Error'] / 2
-        plt.plot(x, y - yrms, color='#279F00', alpha=0.5)
-        plt.plot(x, y + yrms, color='#279F00', alpha=0.5)
-        ax.fill_between(x=x, y1=y - yrms, y2=y + yrms, color='#279F00', alpha=0.2, label='RMS Error')
+        if conf["RMS_error"]:
+            yrms = self.data_frame['RMS Error'] / 2
+            plt.plot(x, y - yrms, color='#279F00', alpha=0.5)
+            plt.plot(x, y + yrms, color='#279F00', alpha=0.5)
+            ax.fill_between(x=x, y1=y - yrms, y2=y + yrms, color='#279F00', alpha=0.2, label='RMS Error')
 
         # Config
         ax.set_xlabel(f'Energy / {self.units["Energy"]}')
@@ -151,7 +167,17 @@ class Represent:
         ax.legend(loc='best')
         ax.grid(which='both', alpha=0.25)
 
-        fig.savefig(f"{table.replace(' ', '_')}_{title.replace(' ', '_')}_{particle.replace(' ', '_')}.png")
+        if conf["save_plots"]:
+            fig.savefig(join_path(out_path,
+                                  f"{table.replace(' ', '_')}_"
+                                  f"{title.replace(' ', '_')}_"
+                                  f"{particle.replace(' ', '_')}_"
+                                  f"{task_name}.png"))
+
+        if conf["show_plots"]:
+            plt.show()
+        else:
+            plt.close("all")
 
     def histogram(self):
         table, title, particle = self.table_name.split(':')

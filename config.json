@@ -4,11 +4,22 @@
         "atm_name": "My atmospheric model",
         "grd_temp": 300
     },
+    "tables": {
+        "print": [2501, 2505, 2507, 2508],
+        "export": [2501, 2505, 2507, 2508]
+    },
     "template": {
-        "task_name": "task2",
         "total_showers": 10,
         "primary_particle": "proton",
         "primary_energy": "1 PeV",
         "observing_levels": 41
+    },
+    "plots": {
+        "mean": 1,
+        "minimum_and_maximum": 0,
+        "standard_deviation": 1,
+        "RMS_error": 0,
+        "show_plots": 0,
+        "save_plots": 1
     }
 }

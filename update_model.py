@@ -19,13 +19,22 @@ AddAtmosModel &mylabel
 """
 
 import json
+import os
+from os.path import join as join_path
 
-with open("config.json", "r") as config_file:
-    config = json.load(config_file)
+# Root Directory of the Project
+ROOT_DIR = os.path.abspath("./")
 
 
 class CookModel:
-    def __init__(self, atm_ident: str = "MyModelIDStr", atm_name: str = "My atmospheric model", grd_temp: int = 300):
+    def __init__(self, atm_ident: str = "MyModelIDStr",
+                 atm_name: str = "My atmospheric model",
+                 grd_temp: int = 300,
+                 save_path=None):
+
+        with open("config.json", "r") as config_file:
+            configuration = json.load(config_file)
+        self.config = configuration
 
         h_list = [0, 0.8, 4, 12, 35, 100]  # km
         self.h_units = self.set_height_units(h_list)
@@ -35,7 +44,7 @@ class CookModel:
         self.layers = self.add_layers()
         self.atmos_model = self.set_model(atm_ident, atm_name, grd_temp)
 
-        self.save_model()
+        self.save_model(save_path)
 
     def set_height_units(self, h_list):
         h_units = []
@@ -78,11 +87,16 @@ class CookModel:
                       f"  AtmName {atm_name}\n" \
                       f"  AtmDefault GAMMA GrdTemp {grd_temp} K\n" \
                       f"{self.layers}" \
-                      f"&gamma_label"
+                      f"&gamma_label\n" \
+                      f"Atmosphere {atm_ident}"
         return atmos_model
 
-    def save_model(self):
-        with open('model.inp', 'w+') as f:
+    def save_model(self, save_path):
+        if save_path is not None:
+            save_in = save_path
+        else:
+            save_in = ROOT_DIR
+        with open(join_path(save_in, 'model.inp'), 'w+') as f:
             f.write(self.atmos_model)
 
 
