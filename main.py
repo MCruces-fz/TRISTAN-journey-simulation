@@ -46,7 +46,7 @@ for row in input_df.iterrows():
     CookModel(save_path=dir_path,
               atm_ident=config["model"]["atm_ident"],
               atm_name=config["model"]["atm_name"],
-              grd_temp=config["model"]["grd_temp"])  # FIXME: ATMOSPHERIC MODEL IS NOT RECOGNISED! (page 54, 69 in pdf)
+              grd_temp=config["model"]["grd_temp"])
     # Create tables.inp
     CookTables(save_path=dir_path,
                print_ids=config["tables"]["print"],
@@ -54,9 +54,8 @@ for row in input_df.iterrows():
     # Create task.inp
     CookAiresINP(task_name=dir_name, save_path=dir_path)
 
-    # # Execute Aires
-    # os.system(f"cd {dir_path}; Aires < {dir_name}.inp")  # It Works
-    break
+    # Execute Aires
+    os.system(f"cd {dir_path}; Aires < {dir_name}.inp")  # It Works
 
 for task in os.listdir(aires_inp_path):
     task_full_dir = join_path(aires_inp_path, task)
