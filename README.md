@@ -39,7 +39,7 @@ simulation for each line.
         * atm_ident: identifier for the atmospheric model created.
         * atm_name: extended name for the atmospheric model.
         * grd_temp: temperature at background in K.
-    + tables: (integer values)
+    + tables: (list of integer values)
         * print: list with codes for tables to print.
         * export: list with codes for tables to export.
     + template:
