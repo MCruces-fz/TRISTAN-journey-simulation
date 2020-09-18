@@ -41,7 +41,7 @@ class CookTables:
     def set_print(self, chosen_tables):
         print_tables = ""
         for table in chosen_tables:
-            # print_tables += f"PrintTable {self.table_ids[table]}    # {table}\n"
+            # print_tables += f"PrintTable {self.table_ids[table]}    # {table}\n"  # With table name
             print_tables += f"PrintTable {table}\n"
         return print_tables
 
