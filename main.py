@@ -46,7 +46,7 @@ for row in input_df.iterrows():
     CookModel(save_path=dir_path,
               atm_ident=config["model"]["atm_ident"],
               atm_name=config["model"]["atm_name"],
-              grd_temp=config["model"]["grd_temp"])
+              grd_temp=row[1]["Temp-0"])  # config["model"]["grd_temp"])
     # Create tables.inp
     CookTables(save_path=dir_path,
                print_ids=config["tables"]["print"],
@@ -66,4 +66,3 @@ for task in os.listdir(aires_inp_path):
                 os.mkdir(output_full_path)
             data = CookingDataAIRES(in_path=task_full_dir, file=file)
             Represent(data, out_path=output_full_path, task_name=task)
-

@@ -16,7 +16,7 @@
     },
     "plots": {
         "mean": 1,
-        "minimum_and_maximum": 0,
+        "minimum_and_maximum": 1,
         "standard_deviation": 1,
         "RMS_error": 0,
         "show_plots": 0,

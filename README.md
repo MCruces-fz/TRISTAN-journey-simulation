@@ -11,7 +11,7 @@ will be created.
 ### Auto generated directories:
 - ***AiresINP***: here are generated folders with one simulation 
 each one like those ones:
-    + ***18364-0000***: Year 2019, Day Of the Year 364, Time 0h 00 mins
+    + ***18364-0000***: Year 2018, Day Of the Year 364, Time 0h 00 mins
         * *18364-0000.inp*: Aires INPut file.
         * *tables.inp*: Aires file which specifies tables to print and export.
         * *model.inp*: Aires file which specifies atmospheric model.
@@ -20,12 +20,15 @@ each one like those ones:
         All the codes are explained on Aires Users Guide).
         * *18364-0000.sry*: Aires summary of the simulation.
         * ... Other files explained on the Aires Users Guide.
-    + 18365-0600: Year 2019, Day Of the Year 364, Time 6h 00 mins
-        * ...
-    + ...
+    + ***18365-0600***: Year 2018, Day Of the Year 365, Time 6h 00 mins
+        * *18364-0000.inp*
+        * *tables.inp*
+        * *model.inp*
+        * *...*
+    + ***...***
 - ***OUTPUT***: here are stored the output histograms
 
-## Files:
+## Program files:
 - *main.py*: main file which manages all functionalities.
 - *update_aires_input.py*, *update_model.py*, *update_tables.py*: 
 python files which classes; CookAiresINP, CookModel, CookTables; 
