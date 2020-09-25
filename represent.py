@@ -122,6 +122,7 @@ class Represent:
         # self.histogram()
 
     def diagram(self, out_path="./", task_name="task"):
+        global nonzero
         conf = self.config["plots"]
 
         table, title, particle = self.table_name.split(': ')
@@ -129,8 +130,16 @@ class Represent:
         ax = fig.add_subplot()
         plt.title(f'{title}: {particle}')
 
-        x = self.data_frame['Energy']
-        y = self.data_frame['Mean']
+        if conf["threshold"]:
+            a = self.data_frame['Mean']
+            a[a < conf["threshold"]] = 0
+            nonzero = self.data_frame['Mean'].to_numpy().nonzero()
+
+            x = np.asarray(self.data_frame['Energy'])[nonzero]
+            y = np.asarray(self.data_frame['Mean'])[nonzero]
+        else:
+            x = self.data_frame['Energy']
+            y = self.data_frame['Mean']
 
         # Mean
         if conf["mean"]:
@@ -139,22 +148,32 @@ class Represent:
 
         # Minimum and Maximum
         if conf["minimum_and_maximum"]:
-            ymin = self.data_frame['Minimum']
-            ymax = self.data_frame['Maximum.']
+            if conf["threshold"]:
+                ymin = np.asarray(self.data_frame['Minimum'])[nonzero]
+                ymax = np.asarray(self.data_frame['Maximum.'])[nonzero]
+            else:
+                ymin = self.data_frame['Minimum']
+                ymax = self.data_frame['Maximum.']
             plt.plot(x, ymin, color='#74508D', alpha=0.25)
             plt.plot(x, ymax, color='#74508D', alpha=0.25)
             ax.fill_between(x=x, y1=ymin, y2=ymax, color='#74508D', alpha=0.3, label='Maximum and Minimum.')
 
         # Std. Dev.
         if conf["standard_deviation"]:
-            ystd = self.data_frame['Std. Dev.'] / 2
+            if conf["threshold"]:
+                ystd = np.asarray(self.data_frame['Std. Dev.'])[nonzero] / 2
+            else:
+                ystd = self.data_frame['Std. Dev.'] / 2
             plt.plot(x, y - ystd, color='#ED177A', alpha=0.5)
             plt.plot(x, y + ystd, color='#ED177A', alpha=0.5)
             ax.fill_between(x=x, y1=y - ystd, y2=y + ystd, color='#ED177A', alpha=0.2, label='Std. Dev.')
 
         # RMS Error.
         if conf["RMS_error"]:
-            yrms = self.data_frame['RMS Error'] / 2
+            if conf["threshold"]:
+                yrms = np.asarray(self.data_frame['RMS Error'])[nonzero] / 2
+            else:
+                yrms = self.data_frame['RMS Error'] / 2
             plt.plot(x, y - yrms, color='#279F00', alpha=0.5)
             plt.plot(x, y + yrms, color='#279F00', alpha=0.5)
             ax.fill_between(x=x, y1=y - yrms, y2=y + yrms, color='#279F00', alpha=0.2, label='RMS Error')
@@ -189,10 +208,14 @@ class Represent:
 
 
 if __name__ == '__main__':
-    gamma = CookingDataAIRES(file='learn1.t2501')
-    elect = CookingDataAIRES(file='learn1.t2505')
-    p_muon = CookingDataAIRES(file='learn1.t2507')
-    m_muon = CookingDataAIRES(file='learn1.t2508')
+    input_path = "/home/mcruces/Documents/GitHub/TRISTAN-journey-PT/AiresINP/18350-0000/"
+    # input_path = "/home/mcruces/Documents/GitHub/CodeBlocks/AIRES/"
+    file_name = "18350-0000"
+    # file_name = "learn1"
+    gamma = CookingDataAIRES(in_path=input_path, file=f'{file_name}.t2501')
+    elect = CookingDataAIRES(in_path=input_path, file=f'{file_name}.t2505')
+    p_muon = CookingDataAIRES(in_path=input_path, file=f'{file_name}.t2507')
+    m_muon = CookingDataAIRES(in_path=input_path, file=f'{file_name}.t2508')
 
     muons = MergeData(p_muon, m_muon)
     output = muons.data_frame

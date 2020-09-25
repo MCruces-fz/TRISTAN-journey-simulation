@@ -5,21 +5,22 @@
         "grd_temp": 300
     },
     "tables": {
-        "print": [2501, 2505, 2507, 2508],
-        "export": [2501, 2505, 2507, 2508]
+        "print": [2501, 2505, 2506, 2507, 2508, 2521, 2522, 5513],
+        "export": [2501, 2505, 2506, 2507, 2508, 2521, 2522, 5513]
     },
     "template": {
-        "total_showers": 10,
+        "total_showers": 100,
         "primary_particle": "proton",
         "primary_energy": "1 PeV",
-        "observing_levels": 41
+        "observing_levels": 80
     },
     "plots": {
         "mean": 1,
         "minimum_and_maximum": 1,
         "standard_deviation": 1,
-        "RMS_error": 0,
+        "RMS_error": 1,
         "show_plots": 0,
-        "save_plots": 1
+        "save_plots": 1,
+        "threshold": 0
     }
 }
