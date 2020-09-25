@@ -4,7 +4,7 @@
  
 ## Usage:
 The user only must configure the settings table with her/his preferences, 
-which is the *config.json* file, and bring the *HeightDensData.txt* file 
+which is the *config.json* file, and bring the *TRISTAN_data_000.txt* file 
 inside ROOT_DIR. Then, executing *main.py*, the AiresINP and OUTPUT directories 
 will be created.
 
@@ -35,7 +35,7 @@ python files which classes; CookAiresINP, CookModel, CookTables;
 that create the main aires input file and attachments like 
 *model.inp* and *tables.inp*, respectively.
 - *represent.py*: there are three classes within it defined
-- *HeightDensData.txt*: Input file with the data for every simulation: one
+- *TRISTAN_data_000.txt*: Input file with the data for every simulation: one
 simulation for each line.
 - *config.json*: **settings** table for user.
     + model: (string values)
@@ -59,3 +59,6 @@ simulation for each line.
         * RMS_error:
         * show_plots:
         * save_plots:
+        * threshold: Use or not threshold representing data on plots
+         (0 -> Do not use threshold; 1, 2, ..., 30, 50, ..., 100, ... 
+         -> Use threshold with that value.)
