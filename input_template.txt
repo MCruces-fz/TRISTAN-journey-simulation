@@ -37,7 +37,7 @@ ObservingLevels {observing_levels} 100 g/cm2 900 g/cm2
 
 #                 HANS VALUES 1   DEFAULT VALUES
 GammaCutEnergy     100 keV     #      200 MeV
-ElectronCutEnergy   50 keV     #      200 MeV
+ElectronCutEnergy   80 keV     #      200 MeV
 MuonCutEnergy        1 MeV     #        1 MeV
 NuclCutEnergy      150 MeV
 MesonCutEnergy     1.5 MeV

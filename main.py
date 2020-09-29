@@ -97,9 +97,9 @@ for task in os.listdir(aires_inp_path):
                 pass
             else:
                 try:
-                    print(f"Filename {file}")
-                    data = CookingDataAIRES(in_path=task_full_dir, file=file)
+                    data = CookingDataAIRES(in_path=task_full_dir, file=file, e_units=config["plots"]["E_units"])
                     Represent(data, out_path=output_full_path, task_name=task)
+                    print(f"Represented {file}")
                 except KeyError:
                     print(f"Some error in CookingDataAires with file {file}")
     # For any task: muons(+) and muons(-), positrons(+) and electrons(-) are merged

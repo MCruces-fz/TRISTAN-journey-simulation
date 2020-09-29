@@ -10,7 +10,7 @@ ROOT_DIR = os.path.abspath("./")
 
 
 class CookingDataAIRES:
-    def __init__(self, in_path="./", file: str = 'learn1.t2505'):
+    def __init__(self, in_path="./", file: str = 'learn1.t2505', e_units="MeV"):
         # Initialize constants
         self.file_name = file
         self.table_name = ''
@@ -22,7 +22,7 @@ class CookingDataAIRES:
 
         # Invoke functions
         self.read_data(in_path)
-        self.energy_units(_to='MeV')
+        self.energy_units(_to=e_units)
 
     def read_data(self, in_path):
         with open(join_path(in_path, self.file_name), 'r') as f:
@@ -69,8 +69,11 @@ class CookingDataAIRES:
                        'GeV': 1e9, 'TeV': 1e12, 'PeV': 1e15}
         _from = self.units['Energy']
         factor = unit_values[_from] / unit_values[_to]
-        self.data_frame['Energy'] = factor * self.data_frame['Energy']
-        self.units['Energy'] = _to
+        try:
+            self.data_frame['Energy'] = factor * self.data_frame['Energy']
+            self.units['Energy'] = _to
+        except KeyError:
+            print(f"Energy has not been changed to {_to}, it is still in {_from} ({self.file_name})")
 
 
 class MergeData:
@@ -122,7 +125,7 @@ class Represent:
         # self.histogram()
 
     def diagram(self, out_path="./", task_name="task"):
-        global nonzero
+        # global nonzero
         conf = self.config["plots"]
 
         table, title, particle = self.table_name.split(': ')
@@ -138,12 +141,16 @@ class Represent:
             x = np.asarray(self.data_frame['Energy'])[nonzero]
             y = np.asarray(self.data_frame['Mean'])[nonzero]
         else:
-            x = self.data_frame['Energy']
+            try:
+                x = self.data_frame['Energy']
+            except KeyError:
+                x = self.data_frame.iloc[:, 0]
             y = self.data_frame['Mean']
+            nonzero = None
 
         # Mean
         if conf["mean"]:
-            plt.plot(x, y, color='#000000', label='Particles at Ground.')
+            plt.plot(x, y, color='#000000', label='Mean.')
             ax.fill_between(x=x, y1=y, y2=0, color='#00B5B8', alpha=0.3)
 
         # Minimum and Maximum
@@ -179,9 +186,17 @@ class Represent:
             ax.fill_between(x=x, y1=y - yrms, y2=y + yrms, color='#279F00', alpha=0.2, label='RMS Error')
 
         # Config
-        ax.set_xlabel(f'Energy / {self.units["Energy"]}')
-        ax.set_xscale('log')
-        ax.set_ylabel('Particles at Ground')
+        if self.data_frame.columns[0] == "Energy":
+            ax.set_xscale('log')
+            unit = self.units["Energy"]
+        elif self.data_frame.columns[0] == "R (distance to the core)":
+            unit = self.units["Length"]
+        elif self.data_frame.columns[0] == "Depth of obs. level":
+            unit = self.units["Depth"]
+        else:
+            unit = "#"
+        ax.set_xlabel(f'{self.data_frame.columns[0]} / {unit}')
+        ax.set_ylabel('Particles')
         plt.yticks(rotation=60)
         ax.legend(loc='best')
         ax.grid(which='both', alpha=0.25)

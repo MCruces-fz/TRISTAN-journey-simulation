@@ -6,7 +6,7 @@
     },
     "tables": {
         "print": [2501, 2505, 2506, 2507, 2508, 2521, 2522, 5513],
-        "export": [2501, 2505, 2506, 2507, 2508, 2521, 2522, 5513]
+        "export": [2501, 2505, 2506, 2507, 2508, 2521, 2522, 5513, 1001, 1301, 1501, 2001, 2301]
     },
     "template": {
         "total_showers": 100,
@@ -15,6 +15,7 @@
         "observing_levels": 80
     },
     "plots": {
+        "E_units": "MeV",
         "mean": 1,
         "minimum_and_maximum": 1,
         "standard_deviation": 1,
