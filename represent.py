@@ -9,6 +9,148 @@ from os.path import join as join_path
 ROOT_DIR = os.path.abspath("./")
 
 
+def grdpcles_dat(dir_path: str, dir_name: str, save_plots: bool = False, deg: bool = True):
+    """
+    It makes an histogram with the number of particles of each type (gammas, electrons,
+    mouns) with bins equiseparated from each other by 5 degrees
+
+    :param dir_path: path to the directory with the archive.dat
+    :param dir_name: name of the archive.dat
+    :param save_plots: True if save, False if not.
+    :param deg: True in degrees, False in radians.
+    :return: Three arrays (gammas, electrons, mouns) with number of particles in each bin.
+    """
+    plt.close("all")
+
+    save_path = join_path(ROOT_DIR, "OUTPUT")
+    full_path_name = join_path(dir_path, dir_name)
+
+    with open(f"{full_path_name}.dat", newline='\n') as f:
+        raw_lines = f.readlines()
+        # print("*** Len Data: ", len(raw_lines))
+        data = np.zeros((0, 6))
+        count = 0
+        for line in raw_lines:
+            count += 1
+            # print(count, "/", len(raw_lines))
+            row = [float(i) for i in line.split()]
+            data = np.vstack((data, row))
+
+    ux = data[:, 3]
+    uy = data[:, 4]
+    KinE = data[:, 5]
+    uz = - np.sqrt(1 - ux ** 2 - uy ** 2)
+    angle = np.arctan(- np.sqrt(ux ** 2 + uy ** 2) / uz)
+
+    r = data[:, 1]
+    phi = data[:, 2]
+    '''
+    plt.figure('Positions')
+    # plt.plot(r * np.cos(phi), r * np.sin(phi))
+    plt.plot(r * np.cos(phi), r * np.sin(phi), "k.")
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.title('Position Hits at Ground')
+    if save_plots:
+        plt.savefig(f'{save_path}/{dir_name}_positions.png')
+    '''
+    '''
+    fig, ax = plt.subplots(ncols=1, figsize=(7, 4))
+    hb = ax.hexbin(r, phi, bins='log', gridsize=50, cmap='inferno')
+    ax.set_title("Hexagon coordinates")
+    ax.set_xlabel('Distance from core / m')
+    ax.set_ylabel('Polar angle / rad')
+    cb = fig.colorbar(hb, ax=ax)
+    cb.set_label('counts')
+    if save_plots:
+        fig.savefig(f'{save_path}/{dir_name}_phi_r_coordinates.png')
+    '''
+    '''
+    fig, ax = plt.subplots(ncols=1, figsize=(7, 4))
+    hb = ax.hexbin(phi, KinE, bins='log', gridsize=50, cmap='inferno')
+    ax.set_title("Hexagon energies")
+    ax.set_xlabel('Polar angle / rad')
+    ax.set_ylabel('Particle Energy / GeV')
+    cb = fig.colorbar(hb, ax=ax)
+    cb.set_label('counts')
+    if save_plots:
+        fig.savefig(f'{save_path}/{dir_name}_E_phi_coordinates.png')
+    '''
+
+    codes = data[:, 0]
+    gamm_ids = np.where(codes == 1)
+    elec_ids = np.where(abs(codes) == 2)
+    muon_ids = np.where(abs(codes) == 3)
+
+    deg_bins = np.array([0., 5., 10., 15., 20., 25., 30., 35., 40., 45.,
+                         50., 55., 60., 65., 70., 75., 80., 85., 90., 95.])
+    rad_bins = deg_bins * np.pi / 180.
+
+    plt.figure('Gammas')
+    if deg:
+        gamma_hist, _, _ = plt.hist(angle[gamm_ids] * 180. / np.pi, bins=deg_bins)
+        plt.xlabel('Zenith Angle / deg')
+    else:
+        gamma_hist, _, _ = plt.hist(angle[gamm_ids], bins=rad_bins)
+        plt.xlabel('Zenith Angle / rad')
+    plt.ylabel('Number of gammas at grid')
+    # plt.xlim(0, 1.6)
+    # plt.ylim(0, 1400)
+    plt.title('Gammas Histogram')
+    if save_plots:
+        plt.savefig(f'{save_path}/{dir_name}_gammas_histogram.png')
+
+    plt.figure('Electrons')
+    if deg:
+        elect_hist, _, _ = plt.hist(angle[elec_ids] * 180. / np.pi, bins=deg_bins)
+        plt.xlabel('Zenith Angle / deg')
+    else:
+        elect_hist, _, _ = plt.hist(angle[elec_ids], bins=rad_bins)
+        plt.xlabel('Zenith Angle / rad')
+    plt.ylabel('Number of electrons at grid')
+    # plt.xlim(0, 1.6)
+    # plt.ylim(0, 1400)
+    plt.title('Electrons Histogram')
+    if save_plots:
+        plt.savefig(f'{save_path}/{dir_name}_electrons_histogram.png')
+
+    plt.figure('Muons')
+    if deg:
+        muons_hist, _, _ = plt.hist(angle[muon_ids] * 180. / np.pi, bins=deg_bins)
+        plt.xlabel('Zenith Angle / deg')
+    else:
+        muons_hist, _, _ = plt.hist(angle[muon_ids], bins=rad_bins)
+        plt.xlabel('Zenith Angle / rad')
+    plt.ylabel('Number of muons at grid')
+    # plt.xlim(0, 1.6)
+    # plt.ylim(0, 1400)
+    plt.title('Muons Histogram')
+    if save_plots:
+        plt.savefig(f'{save_path}/{dir_name}_muons_histogram.png')
+
+    plt.figure('All Part')
+    if deg:
+        plt.hist(angle * 180. / np.pi, bins=deg_bins)
+        plt.xlabel('Polar Angle / deg')
+    else:
+        plt.hist(angle, bins=rad_bins)
+        plt.xlabel('Polar Angle / rad')
+    plt.ylabel('Number of particles at grid')
+    # plt.xlim(0, 1.6)
+    # plt.ylim(0, 1400)
+    plt.title('Particles Histogram')
+    if save_plots:
+        plt.savefig(f'{save_path}/{dir_name}_all_particles_histogram.png')
+
+    plt.close("all")
+    return gamma_hist, elect_hist, muons_hist
+
+
+if __name__ == "__main__":
+    grdpcles_dat(dir_path=join_path(ROOT_DIR, join_path("AiresINP", "18350-0000")),
+                 dir_name="18350-0000", save_plots=True, deg=True)
+
+
 class CookingDataAIRES:
     def __init__(self, in_path="./", file: str = 'learn1.t2505', e_units="MeV"):
         # Initialize constants

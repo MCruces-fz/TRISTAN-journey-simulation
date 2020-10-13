@@ -23,8 +23,8 @@ PrimaryEnergy       {primary_energy}
 
 #--------------------------- OPTIONAL DIRECTIVES  -----------------------------
 
-RunsPerProcess 5    # You will understand these directives when running
-ShowersPerRun  20   # the program (see the user's manual).
+# RunsPerProcess 5    # You will understand these directives when running
+# ShowersPerRun  20   # the program (see the user's manual).
 
 Thinning   50 GeV  # Absolute as well as Relative specifications allowed.
 

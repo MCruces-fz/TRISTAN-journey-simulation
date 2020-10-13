@@ -8,12 +8,12 @@ e-mails:
 from update_model import CookModel
 from update_tables import CookTables
 from update_aires_input import CookAiresINP
-from represent import CookingDataAIRES, MergeData, Represent
+from represent import CookingDataAIRES, MergeData, Represent, grdpcles_dat
 import json
 import os
 import sys
 from os.path import join as join_path
-
+import numpy as np
 import pandas as pd
 
 # Root Directory of the Project
@@ -59,6 +59,8 @@ def call_merger(ons: list):
         print("There aren't particles to merge data")
 
 
+hits_by_angle = np.zeros([0, 3 * 19])  # 19 is the number of bins from 0 to 95 degrees
+
 # Now inside AiresINP, the directories for any simulation
 for row in input_df.iterrows():
     dir_name = row[0]  # Date is the name for any directory of simulation
@@ -80,7 +82,27 @@ for row in input_df.iterrows():
 
     # Execute Aires
     os.system(f"cd {dir_path}; Aires < {dir_name}.inp")  # It Works
-    break  # Only First Simulation
+
+    # Execute gfortran
+    os.system(f"cd {dir_path}; "
+              "gfortran -o grdpcles_map ../../grdpcles_reader.f -L${HOME}"
+              f"/aires/{config['AiresVersion']}/lib/ -lAires -lgfortran")
+    os.system(f"cd {dir_path}; "
+              "./grdpcles_map << XX1\n"
+              f"{dir_name}.grdpcles\n"  # Input file
+              f"{dir_name}.dat\n"  # Output file
+              "10000. 10000.\n"  # Size of grid x and y (m)
+              "25.\n"  # Step (m)
+              "5\n"  # Number of showers
+              "XX1")
+
+    gamma_hist, elect_hist, muons_hist = grdpcles_dat(dir_path=dir_path, dir_name=dir_name, save_plots=False, deg=True)
+    # print(gamma_hist.shape, elect_hist.shape, muons_hist.shape)
+    row = np.hstack((gamma_hist, elect_hist, muons_hist))
+    hits_by_angle = np.vstack((hits_by_angle, row))
+    # break  # Only First Simulation
+
+np.savetxt(fname="angles_distribution.txt", X=hits_by_angle, fmt='%04d')
 
 # For any task are crated the histograms and saved on ROOT_DIR/OUTPUT
 for task in os.listdir(aires_inp_path):
@@ -102,6 +124,7 @@ for task in os.listdir(aires_inp_path):
                     print(f"Represented {file}")
                 except KeyError:
                     print(f"Some error in CookingDataAires with file {file}")
-    # For any task: muons(+) and muons(-), positrons(+) and electrons(-) are merged
-    call_merger(muons)
-    call_merger(trons)
+    # For any task:
+    call_merger(muons)  # muons(+) and muons(-)
+    call_merger(trons)  # positrons(+) and electrons(-)
+    # are merged.

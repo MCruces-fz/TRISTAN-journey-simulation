@@ -54,7 +54,7 @@ class CookTables:
                       "\n" \
                       "#------------------------ OUTPUT CONTROL STATEMENTS ---------------------------\n" \
                       "\n" \
-                      "LaTeX  # To print with better appearance\n" \
+                      "# LaTeX  # To print with better appearance\n" \
                       "StackInfo  # To see stack usage (rather technical stuff).\n" \
                       "OutputListing Full  # More technical stuff.\n" \
                       "TableIndex # Use this directive once, hard copy the resulting listing and\n" \

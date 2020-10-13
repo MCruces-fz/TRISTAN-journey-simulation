@@ -9,10 +9,10 @@
         "export": [2501, 2505, 2506, 2507, 2508, 2521, 2522, 5513, 1001, 1301, 1501, 2001, 2301]
     },
     "template": {
-        "total_showers": 100,
+        "total_showers": 5,
         "primary_particle": "proton",
         "primary_energy": "1 PeV",
-        "observing_levels": 80
+        "observing_levels": 40
     },
     "plots": {
         "E_units": "MeV",
@@ -21,7 +21,8 @@
         "standard_deviation": 1,
         "RMS_error": 1,
         "show_plots": 0,
-        "save_plots": 1,
+        "save_plots": 0,
         "threshold": 0
-    }
+    },
+    "AiresVersion": "19-04-00"
 }
