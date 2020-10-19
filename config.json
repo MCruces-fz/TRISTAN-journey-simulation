@@ -21,7 +21,7 @@
         "standard_deviation": 1,
         "RMS_error": 1,
         "show_plots": 0,
-        "save_plots": 0,
+        "save_plots": 1,
         "threshold": 0
     },
     "AiresVersion": "19-04-00"

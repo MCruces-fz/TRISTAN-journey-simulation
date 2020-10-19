@@ -59,48 +59,49 @@ def call_merger(ons: list):
         print("There aren't particles to merge data")
 
 
-hits_by_angle = np.zeros([0, 3 * 19])  # 19 is the number of bins from 0 to 95 degrees
+# Define empty array to store angles information
+hits_by_angle = np.zeros([0, 19 * 3])  # 19 bins from 0 to 95 degrees, 3 types of particles
 
 # Now inside AiresINP, the directories for any simulation
 for row in input_df.iterrows():
-    dir_name = row[0]  # Date is the name for any directory of simulation
+    dir_name = row[0]  # Date is the name for any directory of simulation (its task name)
     dir_path = join_path(aires_inp_path, dir_name)
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
 
-    # Create model.inp
+    # Create file model.inp
     CookModel(save_path=dir_path,
               atm_ident=config["model"]["atm_ident"],
               atm_name=config["model"]["atm_name"],
               grd_temp=row[1]["Temp-0"])  # config["model"]["grd_temp"])
-    # Create tables.inp
+    # Create file tables.inp
     CookTables(save_path=dir_path,
                print_ids=config["tables"]["print"],
                export_ids=config["tables"]["export"])
-    # Create task.inp
+    # Create file task.inp
     CookAiresINP(task_name=dir_name, save_path=dir_path)
 
     # Execute Aires
     os.system(f"cd {dir_path}; Aires < {dir_name}.inp")  # It Works
 
-    # Execute gfortran
+    # Execute gfortran for uncompress .grdpcles data from bash
     os.system(f"cd {dir_path}; "
               "gfortran -o grdpcles_map ../../grdpcles_reader.f -L${HOME}"
               f"/aires/{config['AiresVersion']}/lib/ -lAires -lgfortran")
     os.system(f"cd {dir_path}; "
               "./grdpcles_map << XX1\n"
               f"{dir_name}.grdpcles\n"  # Input file
-              f"{dir_name}.dat\n"  # Output file
-              "10000. 10000.\n"  # Size of grid x and y (m)
-              "25.\n"  # Step (m)
-              "5\n"  # Number of showers
+              f"{dir_name}.dat\n"       # Output file
+              "10000. 10000.\n"         # Size of grid x and y (m)
+              "25.\n"                   # Step (m)
+              "5\n"                     # Number of showers
               "XX1")
 
-    gamma_hist, elect_hist, muons_hist = grdpcles_dat(dir_path=dir_path, dir_name=dir_name, save_plots=False, deg=True)
-    # print(gamma_hist.shape, elect_hist.shape, muons_hist.shape)
+    # Save angles data on ./angles_distribution.txt
+    gamma_hist, elect_hist, muons_hist = grdpcles_dat(dir_path=dir_path, dir_name=dir_name, save_plots=True, deg=True)
     row = np.hstack((gamma_hist, elect_hist, muons_hist))
     hits_by_angle = np.vstack((hits_by_angle, row))
-    # break  # Only First Simulation
+    break  # Works Only for First Simulation
 
 np.savetxt(fname="angles_distribution.txt", X=hits_by_angle, fmt='%04d')
 

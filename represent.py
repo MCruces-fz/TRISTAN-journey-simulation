@@ -54,9 +54,9 @@ def grdpcles_dat(dir_path: str, dir_name: str, save_plots: bool = False, deg: bo
     if save_plots:
         plt.savefig(f'{save_path}/{dir_name}_positions.png')
     '''
-    '''
+
     fig, ax = plt.subplots(ncols=1, figsize=(7, 4))
-    hb = ax.hexbin(r, phi, bins='log', gridsize=50, cmap='inferno')
+    hb = ax.hexbin(r, phi, bins='log', cmap='jet')  # TODO: change to hist2d
     ax.set_title("Hexagon coordinates")
     ax.set_xlabel('Distance from core / m')
     ax.set_ylabel('Polar angle / rad')
@@ -64,10 +64,10 @@ def grdpcles_dat(dir_path: str, dir_name: str, save_plots: bool = False, deg: bo
     cb.set_label('counts')
     if save_plots:
         fig.savefig(f'{save_path}/{dir_name}_phi_r_coordinates.png')
-    '''
-    '''
+
+
     fig, ax = plt.subplots(ncols=1, figsize=(7, 4))
-    hb = ax.hexbin(phi, KinE, bins='log', gridsize=50, cmap='inferno')
+    hb = ax.hexbin(phi, KinE, bins='log', cmap='jet')  # TODO: change to hist2d
     ax.set_title("Hexagon energies")
     ax.set_xlabel('Polar angle / rad')
     ax.set_ylabel('Particle Energy / GeV')
@@ -75,7 +75,7 @@ def grdpcles_dat(dir_path: str, dir_name: str, save_plots: bool = False, deg: bo
     cb.set_label('counts')
     if save_plots:
         fig.savefig(f'{save_path}/{dir_name}_E_phi_coordinates.png')
-    '''
+
 
     codes = data[:, 0]
     gamm_ids = np.where(codes == 1)
@@ -152,7 +152,14 @@ if __name__ == "__main__":
 
 
 class CookingDataAIRES:
-    def __init__(self, in_path="./", file: str = 'learn1.t2505', e_units="MeV"):
+    def __init__(self, in_path: str = "./", file: str = 'learn1.t2505', e_units="MeV"):
+        """
+        Class which reads data from table files.tnnnn exported by AIRES and manages it.
+
+        :param in_path: Absolute path to file directory
+        :param file: Name (with extension) of the file.tnnnn
+        :param e_units: Energy Units to convert all data (AIRES format)
+        """
         # Initialize constants
         self.file_name = file
         self.table_name = ''
@@ -167,6 +174,12 @@ class CookingDataAIRES:
         self.energy_units(_to=e_units)
 
     def read_data(self, in_path):
+        """
+        Method which reads data from file and sotores it in a pandas dataframe
+
+        :param in_path: Absolute path to file directory
+        :return: Void function (it doesn't return anything, but it calculates dataframe)
+        """
         with open(join_path(in_path, self.file_name), 'r') as f:
             lin = f.readlines()
             lines = list(map(lambda s: s.strip(), lin))
@@ -207,6 +220,12 @@ class CookingDataAIRES:
                                            columns=self.col_titles[1:])
 
     def energy_units(self, _to='MeV'):
+        """
+        Method which changes units from dataframe
+
+        :param _to: Unit to change
+        :return: Void function (It only modifies the pandas dataframe)
+        """
         unit_values = {'eV': 1, 'keV': 1e3, 'MeV': 1e6,
                        'GeV': 1e9, 'TeV': 1e12, 'PeV': 1e15}
         _from = self.units['Energy']
