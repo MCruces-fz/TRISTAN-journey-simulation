@@ -1,4 +1,5 @@
 {
+    "InputFileName": "TRISTAN_data_000.txt",
     "AiresVersion": "19-04-00",
     "SRY_dir": 1,
     "model": {
@@ -11,7 +12,7 @@
         "export": [2501, 2505, 2506, 2507, 2508, 2521, 2522, 5513, 1001, 1301, 1501, 2001, 2301]
     },
     "template": {
-        "total_showers": 5,
+        "total_showers": 1,
         "primary_particle": "proton",
         "primary_energy": "1 PeV",
         "observing_levels": 40

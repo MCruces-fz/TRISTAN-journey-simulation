@@ -28,7 +28,7 @@ with open("config.json", "r") as config_file:
     config = json.load(config_file)
 
 # Read input data
-input_df = pd.read_csv("TRISTAN_data_000.txt", index_col=0, header=0, delim_whitespace=True, na_values="(missing)")
+input_df = pd.read_csv(config["InputFileName"], index_col=0, header=0, delim_whitespace=True, na_values="(missing)")
 
 # First, we create the directory ROOT_DIR/AiresINP:
 aires_inp_path = join_path(ROOT_DIR, "AiresINP")
@@ -103,13 +103,13 @@ for row in input_df.iterrows():
               "XX1")
     if config["SRY_dir"]:  # Copy any taskname.sry to ROOT_DIR/SUMMARY/
         os.system(f"cd {dir_path};"
-                  f"cp *.sry {sry_full_path}")
+                  f"cp {dir_path}.sry {sry_full_path}")
 
     # Save angles data on ./angles_distribution.txt
     gamma_hist, elect_hist, muons_hist = grdpcles_dat(dir_path=dir_path, dir_name=dir_name, save_plots=True, deg=True)
     row = np.hstack((gamma_hist, elect_hist, muons_hist))
     hits_by_angle = np.vstack((hits_by_angle, row))
-    break  # Works Only for First Simulation
+    # break  # Works Only for First Simulation
 
 np.savetxt(fname="angles_distribution.txt", X=hits_by_angle, fmt='%04d')
 

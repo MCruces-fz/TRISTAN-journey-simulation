@@ -1,6 +1,11 @@
 # shipTristanPT
- Simulation of particle showers on the TRISTAN detector on its journey 
- through the Atlantic Ocean.
+Simulation of particle showers on the TRISTAN detector on its journey 
+through the Atlantic Ocean.
+
+It is necessary to have installed:
+ - AIRES (and added library to the LD_LIBRARY_PATH)
+ - gfortran compiler
+ - All python basic libraries
  
 ## Usage:
 The user only must configure the settings table with her/his preferences, 
