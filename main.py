@@ -40,6 +40,11 @@ output_full_path = join_path(ROOT_DIR, "OUTPUT")
 if not os.path.exists(output_full_path):
     os.mkdir(output_full_path)
 
+# And the directory ROOT_DIR/SUMMARY:
+sry_full_path = join_path(ROOT_DIR, "SUMMARY")
+if not os.path.exists(sry_full_path) and config["SRY_dir"]:
+    os.mkdir(sry_full_path)
+
 
 def call_merger(ons: list):
     """
@@ -96,6 +101,9 @@ for row in input_df.iterrows():
               "25.\n"                   # Step (m)
               "5\n"                     # Number of showers
               "XX1")
+    if config["SRY_dir"]:  # Copy any taskname.sry to ROOT_DIR/SUMMARY/
+        os.system(f"cd {dir_path};"
+                  f"cp *.sry {sry_full_path}")
 
     # Save angles data on ./angles_distribution.txt
     gamma_hist, elect_hist, muons_hist = grdpcles_dat(dir_path=dir_path, dir_name=dir_name, save_plots=True, deg=True)

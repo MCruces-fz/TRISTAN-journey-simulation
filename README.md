@@ -8,7 +8,18 @@ which is the *config.json* file, and bring the *TRISTAN_data_000.txt* file
 inside ROOT_DIR. Then, executing *main.py*, the AiresINP and OUTPUT directories 
 will be created.
 
-***angles_distribution.txt***: Explain the matrices for angles histograms.
+***angles_distribution.txt***: Number of particles which reach ground with 
+azimuth angles between the next intervals:
+
+|| ======== GAMMA ======== 
+|| ====== ELECTRONS ====== 
+|| ======== MUONS ======== ||
+
+[0, 5], (5, 10], (10, 15], ..., ..., ..... ||
+[0, 5], (5, 10], (10, 15], ..., ..., ..... ||
+[0, 5], (5, 10], (10, 15], ..., ..., ..... ||
+
+One line for each simulation.
 
 ### Auto generated directories:
 - ***AiresINP***: here are generated folders with one simulation 
@@ -32,6 +43,8 @@ each one like those ones:
         * *...*
     + ***...***
 - ***OUTPUT***: here are stored the output histograms
+- ***SUMMARY***: only generated if is set "SRY_dir": 1 in config.json. Here are stored 
+all summaries, one for each simulation.
 
 ## Program files:
 - *main.py*: main file which manages all functionalities.
@@ -45,6 +58,10 @@ from *files.grdpcles*.
 - *TRISTAN_data_000.txt*: Input file with the data for every simulation: one
 simulation for each line.
 - *config.json*: **settings** table for user.
+    + AiresVersion: String which specifies the Aires version written in format "19-04-00"
+    (the same format as the Iroot directory for installation).
+    + SRY_dir: boolean to say whether create or not the SUMMARY directory,
+    where all summaries of each simulation are stored.
     + model: (string values)
         * atm_ident: identifier for the atmospheric model created.
         * atm_name: extended name for the atmospheric model.
@@ -69,5 +86,3 @@ simulation for each line.
         * threshold: Use or not threshold representing data on plots
          (0 -> Do not use threshold; 1, 2, ..., 30, 50, ..., 100, ... 
          -> Use threshold with that value.)
-    + AiresVersion: String which specifies the Aires version written in format "19-04-00"
-    (the same format as the Iroot directory for installation).

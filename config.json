@@ -1,4 +1,6 @@
 {
+    "AiresVersion": "19-04-00",
+    "SRY_dir": 1,
     "model": {
         "atm_ident": "MyModelIDStr",
         "atm_name": "My atmospheric model",
@@ -23,6 +25,5 @@
         "show_plots": 0,
         "save_plots": 1,
         "threshold": 0
-    },
-    "AiresVersion": "19-04-00"
+    }
 }
