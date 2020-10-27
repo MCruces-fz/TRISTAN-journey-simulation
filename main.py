@@ -103,7 +103,7 @@ for row in input_df.iterrows():
               "XX1")
     if config["SRY_dir"]:  # Copy any taskname.sry to ROOT_DIR/SUMMARY/
         os.system(f"cd {dir_path};"
-                  f"cp {dir_path}.sry {sry_full_path}")
+                  f"cp {dir_name}.sry {sry_full_path}")
 
     # Save angles data on ./angles_distribution.txt
     gamma_hist, elect_hist, muons_hist = grdpcles_dat(dir_path=dir_path, dir_name=dir_name, save_plots=True, deg=True)

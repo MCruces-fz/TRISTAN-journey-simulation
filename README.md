@@ -10,11 +10,16 @@ It is necessary to have installed:
 ## Usage:
 The user only must configure the settings table with her/his preferences, 
 which is the *config.json* file, and bring the *TRISTAN_data_000.txt* file 
-inside ROOT_DIR. Then, executing *main.py*, the AiresINP and OUTPUT directories 
+inside ROOT_DIR with simulation data. Te name of input file is chosen in 
+*config.json* file.
+
+Then, executing *main.py* with Python 3, the AiresINP and OUTPUT directories 
 will be created.
 
-***angles_distribution.txt***: Number of particles which reach ground with 
-azimuth angles between the next intervals:
+### Angles distribution at ground
+
+The file ***angles_distribution.txt*** contains: number of particles which 
+reach ground with azimuth angles between the next intervals:
 
 || ======== GAMMA ======== 
 || ====== ELECTRONS ====== 
@@ -34,12 +39,13 @@ each one like those ones:
         * *tables.inp*: Aires file which specifies tables to print and export.
         * *model.inp*: Aires file which specifies atmospheric model.
         * *18364-0000.tnnnn*: Aires tables generated (nnnn is the code of the 
-        table, which is specified by user in config.json > tables > print/ export.
-        All the codes are explained on Aires Users Guide).
+        table, which is specified by user in config.json > tables > print/ 
+        export. All the codes are explained on Aires Users Guide).
         * *18364-0000.sry*: Aires summary of the simulation.
-        * *18364-000.grdpcles*: File with large compressed data about the simulation.
-        * *18364-000.dat*: Chosen data uncompressed from *18364-000.grdpcles* by the 
-        fortran program *grdpcles_reader.f* located in ROOT_DIR.
+        * *18364-000.grdpcles*: File with large compressed data about the 
+        simulation.
+        * *18364-000.dat*: Chosen data uncompressed from *18364-000.grdpcles* 
+        by the fortran program *grdpcles_reader.f* located in ROOT_DIR.
         * ... Other files explained on the Aires Users Guide.
     + ***18365-0600***: Year 2018, Day Of the Year 365, Time 6h 00 mins
         * *18364-0000.inp*
@@ -48,8 +54,8 @@ each one like those ones:
         * *...*
     + ***...***
 - ***OUTPUT***: here are stored the output histograms
-- ***SUMMARY***: only generated if is set "SRY_dir": 1 in config.json. Here are stored 
-all summaries, one for each simulation.
+- ***SUMMARY***: only generated if is set "SRY_dir": 1 in config.json. Here 
+are stored all summaries, one for each simulation.
 
 ## Program files:
 - *main.py*: main file which manages all functionalities.
@@ -58,13 +64,16 @@ python files which classes; CookAiresINP, CookModel, CookTables;
 that create the main aires input file and attachments like 
 *model.inp* and *tables.inp*, respectively.
 - *represent.py*: there are three classes within it defined.
-- *grdpcles_reader.f*: Program written in fortran for extracting compressed data 
-from *files.grdpcles*.
+- *grdpcles_reader.f*: Program written in fortran for extracting compressed 
+data from *files.grdpcles*.
 - *TRISTAN_data_000.txt*: Input file with the data for every simulation: one
 simulation for each line.
 - *config.json*: **settings** table for user.
-    + AiresVersion: String which specifies the Aires version written in format "19-04-00"
-    (the same format as the Iroot directory for installation).
+    + InputFileName: String with the complete name of the input file 
+    *"filename.txt"*. In case it is saved in another directory, you must give 
+    full path or relative path from ROOT_DIR.
+    + AiresVersion: String which specifies the Aires version written in format 
+    "19-04-00" (the same format as the Iroot directory for installation).
     + SRY_dir: boolean to say whether create or not the SUMMARY directory,
     where all summaries of each simulation are stored.
     + model: (string values)
@@ -75,9 +84,9 @@ simulation for each line.
         * print: list with codes for tables to print.
         * export: list with codes for tables to export.
     + template:
-        * total_showers: (int)
-        * primary_particle: (str)
-        * primary_energy: (str)
+        * total_showers: (int, It is better if it is strictly larger than 1)
+        * primary_particle: (str: "neutron", "proton"... AIRES naming)
+        * primary_energy: (str: "1 PeV", "100 GeV" ...)
         * oberving_levels: (int)
     + plots: say whether or not it shows the following data (boolean 
     values, but only **1** or **0**, because config.json doesn't support 
