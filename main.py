@@ -27,9 +27,6 @@ if ROOT_DIR not in sys.path:
 with open("config.json", "r") as config_file:
     config = json.load(config_file)
 
-# Read input data
-input_df = pd.read_csv(config["InputFileName"], index_col=0, header=0, delim_whitespace=True, na_values="(missing)")
-
 # First, we create the directory ROOT_DIR/AiresINP:
 aires_inp_path = join_path(ROOT_DIR, "AiresINP")
 if not os.path.exists(aires_inp_path):
@@ -45,10 +42,20 @@ sry_full_path = join_path(ROOT_DIR, "SUMMARY")
 if not os.path.exists(sry_full_path) and config["SRY_dir"]:
     os.mkdir(sry_full_path)
 
+# Read input data
+input_file_name = config["InputFileName"]
+if input_file_name.endswith(".txt"):
+    input_df = pd.read_csv(input_file_name, index_col=0, header=0, delim_whitespace=True, na_values="(missing)")
+elif input_file_name.endswith(".csv"):
+    input_df = pd.read_csv("densidades2019.csv", index_col=0, sep=";")
+else:
+    quit(0)
+
 
 def call_merger(ons: list):
     """
     Merges data from the list of muons(+), muons(-), positrons(+) and electrons(-)
+
     :param ons: list of dictionaries {"path": "...", "file": ...}
     :return: It is a void function.
     """
@@ -74,11 +81,16 @@ for row in input_df.iterrows():
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
 
+    try:
+        temp_0 = row[1]["Temp-0"]
+    except Exception as e:
+        temp_0 = config["model"]["grd_temp"]
+
     # Create file model.inp
     CookModel(save_path=dir_path,
               atm_ident=config["model"]["atm_ident"],
               atm_name=config["model"]["atm_name"],
-              grd_temp=row[1]["Temp-0"])  # config["model"]["grd_temp"])
+              grd_temp=temp_0)  # config["model"]["grd_temp"])
     # Create file tables.inp
     CookTables(save_path=dir_path,
                print_ids=config["tables"]["print"],
