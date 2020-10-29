@@ -1,11 +1,11 @@
 {
-    "InputFileName": "densidades2019.csv",
+    "InputFileName": "../AiresDataRigel/densidades2019.csv",
     "AiresVersion": "19-04-00",
     "SRY_dir": 1,
     "model": {
         "atm_ident": "MyModelIDStr",
         "atm_name": "My atmospheric model",
-        "grd_temp": 300
+        "grd_temp": 293.15
     },
     "tables": {
         "print": [2501, 2505, 2506, 2507, 2508, 2521, 2522, 5513],
