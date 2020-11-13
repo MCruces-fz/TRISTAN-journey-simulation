@@ -1,5 +1,5 @@
 {
-    "InputFileName": "../AiresDataRigel/densidades2019.csv",
+    "InputFileName": "TRISTAN_data_000.txt",
     "AiresVersion": "19-04-00",
     "SRY_dir": 1,
     "model": {

@@ -88,6 +88,7 @@ for row in input_df.iterrows():
 
     # Create file model.inp
     CookModel(save_path=dir_path,
+              input_df_row=row[1],
               atm_ident=config["model"]["atm_ident"],
               atm_name=config["model"]["atm_name"],
               grd_temp=temp_0)  # config["model"]["grd_temp"])

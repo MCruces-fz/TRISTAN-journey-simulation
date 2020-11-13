@@ -28,6 +28,7 @@ ROOT_DIR = os.path.abspath("./")
 
 class CookModel:
     def __init__(self, atm_ident: str = "MyModelIDStr",
+                 input_df_row=None,
                  atm_name: str = "My atmospheric model",
                  grd_temp: int = 300,
                  save_path=None):
@@ -38,7 +39,12 @@ class CookModel:
 
         h_list = [0, 0.8, 4, 12, 35, 100]  # km
         self.h_units = self.set_height_units(h_list)
-        dens_list = ["MatchDefault", 1.2184, 0.8422, 0.2765, 6.4846E-9, "MatchDefault"]  # kg/m3
+
+        if input_df_row is None:
+            dens_list = ["MatchDefault   ", 1.2184, 0.8422, 0.2765, 6.4846E-9, "MatchDefault   "]  # kg/m3
+        else:
+            dens_list = self.set_dens_list(input_df_row)
+
         self.dens_units = self.set_dens_units(dens_list)
 
         self.layers = self.add_layers()
@@ -56,6 +62,16 @@ class CookModel:
             h_units.append(hu)
         return h_units
 
+    def set_dens_list(self, inp_df):
+        d_list = ["MatchDefault   ",
+                  inp_df["Dens-1"],
+                  inp_df["Dens-2"],
+                  inp_df["Dens-3"],
+                  inp_df["Dens-4"],
+                  "MatchDefault   "]  # kg/m3
+        # print(f"dlist= {d_list}")
+        return d_list
+
     def set_dens_units(self, dens_list):
         dens_units = []
         for d in dens_list:
@@ -63,8 +79,14 @@ class CookModel:
                 du = [d, ""]
                 dens_units.append(du)
                 continue
-            if d < 10E-3:
-                du = [d * 1000, "g/cm3"]
+            if d <= 1E-3:
+                du = [d * 1E3, "g/cm3"]
+            # if 1E-6 < d <= 1E-3:
+            #     du = [d * 1E3, "g/cm3"]
+            # elif d <= 1E-6:
+            #     du = [d * 1E6, "kg/cm3"]
+            # elif 1E-12 < d <= 1E-9:
+            #     du = [d * 1E9, "kg/cm3"]  # Not accepted by aires
             else:
                 du = [d, "kg/m3"]
             dens_units.append(du)
@@ -73,11 +95,17 @@ class CookModel:
     def add_layers(self):
         layers = ""
         for idx in range(len(self.h_units) - 1):
-            hi, hui = self.h_units[idx]
-            di, dui = self.dens_units[idx]
-            hf, huf = self.h_units[idx + 1]
-            df, duf = self.dens_units[idx + 1]
-            layers += f"  AddLayer\t{hi} {hui}\t{hf} {huf}\t{di} {dui}\t{df} {duf}"
+            hi, hui = self.h_units[idx]  # Height initial value and Height initial Units
+            di, dui = self.dens_units[idx]  # Density initial value and density initial values
+            hf, huf = self.h_units[idx + 1]  # Height final value and Height final Units
+            df, duf = self.dens_units[idx + 1]  # Density final value and density final values
+            try:
+                layers += f"  AddLayer\t{hi:.0f} {hui} \t{hf:.0f} {huf}\t{di:.5e} {dui}\t{df:.5e} {duf}"
+            except ValueError:
+                try:
+                    layers += f"  AddLayer\t{hi:.0f} {hui} \t{hf:.0f} {huf}\t{di} {dui}\t{df:.5e} {duf}"
+                except ValueError:
+                    layers += f"  AddLayer\t{hi:.0f} {hui} \t{hf:.0f} {huf}\t{di:.5e} {dui}\t{df} {duf}"
             layers += "\n"
         return layers
 
@@ -101,4 +129,8 @@ class CookModel:
 
 
 if __name__ == "__main__":
-    CookModel()
+    import pandas as pd
+    inpt_df = pd.read_csv("TRISTAN_data_000.txt", index_col=0, header=0, delim_whitespace=True, na_values="(missing)")
+    for row in inpt_df.iterrows():
+        CookModel(input_df_row=row[1], save_path="/home/mcruces/Downloads")
+        break

@@ -18,11 +18,14 @@ This is a first example of an input file for AIRES.
 
 TotalShowers        {total_showers}
 PrimaryParticle     {primary_particle}
-PrimaryEnergy       {primary_energy}
+PrimaryEnergy       {primary_energy}  # minEner MeV MaxEner MeV Page 123
 # Gamma factor 1.7 as default: - (1 + 1.7) = -2.7
 
 #--------------------------- OPTIONAL DIRECTIVES  -----------------------------
 
+
+PrimaryZenAngle     0 deg 72 deg SC  # sine-cosinedistribution (S for sine distribution)
+PrimaryAzimAngle    37.2 deg 39.5 deg  # Page 53
 # RunsPerProcess 5    # You will understand these directives when running
 # ShowersPerRun  20   # the program (see the user's manual).
 
