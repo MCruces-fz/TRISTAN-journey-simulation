@@ -1,16 +1,16 @@
-# shipTristanPT
+# TRISTAN Journey simulation
 Simulation of particle showers on the TRISTAN detector on its journey 
 through the Atlantic Ocean.
 
 It is necessary to have installed:
- - AIRES (and added library to the LD_LIBRARY_PATH)
+ - AIRES (and added library to the `LD_LIBRARY_PATH`)
  - gfortran compiler
- - All python basic libraries
+ - Python builtin libraries
  
 ## Usage:
 The user only must configure the settings table with her/his preferences, 
 which is the *config.json* file, and bring the *TRISTAN_data_000.txt* file 
-inside ROOT_DIR with simulation data. Te name of input file is chosen in 
+inside `ROOT_DIR` with simulation data. Te name of input file is chosen in 
 *config.json* file.
 
 Then, executing *main.py* with Python 3, the AiresINP and OUTPUT directories 
@@ -21,13 +21,10 @@ will be created.
 The file ***angles_distribution.txt*** contains: number of particles which 
 reach ground with azimuth angles between the next intervals:
 
-|| ======== GAMMA ======== 
-|| ====== ELECTRONS ====== 
-|| ======== MUONS ======== ||
-
-[0, 5], (5, 10], (10, 15], ..., ..., ..... ||
-[0, 5], (5, 10], (10, 15], ..., ..., ..... ||
-[0, 5], (5, 10], (10, 15], ..., ..., ..... ||
+```
+|| ======== GAMMA ======== || ====== ELECTRONS ====== || ======== MUONS ======== ||
+||  [0, 5], (5, 10], ...   ||  [0, 5], (5, 10], ...   ||  [0, 5], (5, 10], ...   ||
+```
 
 One line for each simulation.
 
