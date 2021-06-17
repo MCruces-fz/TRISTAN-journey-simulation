@@ -3,16 +3,16 @@ import os
 from os.path import join as join_path
 
 # Root Directory of the Project
-ROOT_DIR = os.path.abspath("./")
+ROOT_DIR = os.path.abspath("../")
 
 
 class CookAiresINP:
     def __init__(self, task_name, save_path=None):
-        with open("config.json", "r") as config_file:
+        with open("../utils/config.json", "r") as config_file:
             configuration = json.load(config_file)
         self.config = configuration
 
-        with open("input_template.txt", "r") as template:
+        with open("../utils/input_template.txt", "r") as template:
             content = template.read().format(task_name=task_name, **self.config["template"])
         self.content_str = content
 

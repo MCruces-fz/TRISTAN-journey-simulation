@@ -5,10 +5,10 @@ e-mails:
 - mcsquared.fz@gmail.com
 """
 
-from update_model import CookModel
-from update_tables import CookTables
-from update_aires_input import CookAiresINP
-from represent import CookingDataAIRES, MergeData, Represent, grdpcles_dat
+from library.update_model import CookModel
+from library.update_tables import CookTables
+from library.update_aires_input import CookAiresINP
+from library.represent import CookingDataAIRES, MergeData, Represent, grdpcles_dat
 import json
 import os
 import sys
@@ -24,7 +24,7 @@ if ROOT_DIR not in sys.path:
     sys.path.append(ROOT_DIR)
 
 # Read Configurations from config.json
-with open("config.json", "r") as config_file:
+with open("utils/config.json", "r") as config_file:
     config = json.load(config_file)
 
 # First, we create the directory ROOT_DIR/AiresINP:

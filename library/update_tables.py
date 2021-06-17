@@ -10,7 +10,7 @@ import os
 from os.path import join as join_path
 
 # Root Directory of the Project
-ROOT_DIR = os.path.abspath("./")
+ROOT_DIR = os.path.abspath("../")
 
 
 class CookTables:

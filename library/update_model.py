@@ -23,7 +23,7 @@ import os
 from os.path import join as join_path
 
 # Root Directory of the Project
-ROOT_DIR = os.path.abspath("./")
+ROOT_DIR = os.path.abspath("../")
 
 
 class CookModel:
@@ -33,7 +33,7 @@ class CookModel:
                  grd_temp: int = 300,
                  save_path=None):
 
-        with open("config.json", "r") as config_file:
+        with open("../utils/config.json", "r") as config_file:
             configuration = json.load(config_file)
         self.config = configuration
 
@@ -130,7 +130,7 @@ class CookModel:
 
 if __name__ == "__main__":
     import pandas as pd
-    inpt_df = pd.read_csv("TRISTAN_data_000.txt", index_col=0, header=0, delim_whitespace=True, na_values="(missing)")
+    inpt_df = pd.read_csv("../TRISTAN_data_000.txt", index_col=0, header=0, delim_whitespace=True, na_values="(missing)")
     for row in inpt_df.iterrows():
         CookModel(input_df_row=row[1], save_path="/home/mcruces/Downloads")
         break
