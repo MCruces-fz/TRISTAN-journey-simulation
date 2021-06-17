@@ -32,20 +32,23 @@ class CookTables:
         self.input_tables = self.set_tables(print_tables, export_tables)
         self.save_tables(save_path)
 
-    def set_export(self, chosen_tables):
+    @staticmethod
+    def set_export(chosen_tables):
         export_tables = ""
         for table in chosen_tables:
             export_tables += f"ExportTable {table}\n"
         return export_tables
 
-    def set_print(self, chosen_tables):
+    @staticmethod
+    def set_print(chosen_tables):
         print_tables = ""
         for table in chosen_tables:
             # print_tables += f"PrintTable {self.table_ids[table]}    # {table}\n"  # With table name
             print_tables += f"PrintTable {table}\n"
         return print_tables
 
-    def set_tables(self, print_tables, export_tables):
+    @staticmethod
+    def set_tables(print_tables, export_tables):
         text_tables = "#------------------------------------------------------------------------------\n" \
                       "#\n" \
                       "# File tables.inp: Input file included from travel_TT.inp\n" \

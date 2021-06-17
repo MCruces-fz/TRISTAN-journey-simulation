@@ -38,7 +38,7 @@ def grdpcles_dat(dir_path: str, dir_name: str, save_plots: bool = False, deg: bo
 
     ux = data[:, 3]
     uy = data[:, 4]
-    KinE = data[:, 5]
+    kin_e = data[:, 5]
     uz = - np.sqrt(1 - ux ** 2 - uy ** 2)
     angle = np.arctan(- np.sqrt(ux ** 2 + uy ** 2) / uz)
 
@@ -65,9 +65,8 @@ def grdpcles_dat(dir_path: str, dir_name: str, save_plots: bool = False, deg: bo
     if save_plots:
         fig.savefig(f'{save_path}/{dir_name}_phi_r_coordinates.png')
 
-
     fig, ax = plt.subplots(ncols=1, figsize=(7, 4))
-    hb = ax.hexbin(phi, KinE, bins='log', cmap='jet')  # TODO: change to hist2d
+    hb = ax.hexbin(phi, kin_e, bins='log', cmap='jet')  # TODO: change to hist2d
     ax.set_title("Hexagon energies")
     ax.set_xlabel('Polar angle / rad')
     ax.set_ylabel('Particle Energy / GeV')
@@ -75,7 +74,6 @@ def grdpcles_dat(dir_path: str, dir_name: str, save_plots: bool = False, deg: bo
     cb.set_label('counts')
     if save_plots:
         fig.savefig(f'{save_path}/{dir_name}_E_phi_coordinates.png')
-
 
     codes = data[:, 0]
     gamm_ids = np.where(codes == 1)

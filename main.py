@@ -44,6 +44,7 @@ if not os.path.exists(sry_full_path) and config["SRY_dir"]:
 
 # Read input data
 input_file_name = config["InputFileName"]
+input_df = None
 if input_file_name.endswith(".txt"):
     input_df = pd.read_csv(input_file_name, index_col=0, header=0, delim_whitespace=True, na_values="(missing)")
 elif input_file_name.endswith(".csv"):
