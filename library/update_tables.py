@@ -9,8 +9,7 @@ import json
 import os
 from os.path import join as join_path
 
-# Root Directory of the Project
-ROOT_DIR = os.path.abspath("../")
+from utils.constants import ROOT_DIR
 
 
 class CookTables:

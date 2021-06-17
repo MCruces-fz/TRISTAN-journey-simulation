@@ -150,7 +150,7 @@ c      if(irc.ne.0) write(*,*) irc
 ! ------------------------------
 ! Beginning of shower record
 ! ------------------------------
-      if (irc.eq.1) then
+      if (irc==1) then
 
          energy=(10.**(fldata(1)))*1.e9      ! shower energy eV
          zenith=fldata(2)                    ! shower zenith angle (deg)
@@ -170,9 +170,9 @@ c      if(irc.ne.0) write(*,*) irc
 ! e+ (2), e- (-2)
 ! mu+ (3), mu-(-3) 
 ! ------------------------------
-      else if( (irc.eq.0) .and.
-     &  (abs(indata(1)).ge.1) .and.
-     &  (abs(indata(1)).le.3) ) then
+      else if( (irc==0) .and.
+     &  (abs(indata(1))>=1) .and.
+     &  (abs(indata(1))<=3) ) then
           
           code=indata(1)
 
@@ -184,9 +184,9 @@ c      if(irc.ne.0) write(*,*) irc
           ux=fldata(6) !iux)            ! p_x/|p| at arrival at ground
           uy=fldata(7) !iuy)            ! p_y/|p| at arrival at ground
           umod2=ux*ux+uy*uy     
-          if (umod2.gt.1.0) umod2=1. 
+          if (umod2>1.0) umod2=1.
           uz=sqrt(1.-umod2)       ! p_z
-          if (abs(uz).gt.1.0) uz=sign(1.,uz)
+          if (abs(uz)>1.0) uz=sign(1.,uz)
           zenp=acos(uz)           ! arrival angle (rad)
 
 ! Elliminate particles hitting the ground at >= 90 deg. if there is any 
@@ -212,11 +212,11 @@ c      if(irc.ne.0) write(*,*) irc
           write(99,*) code, r, phi, ux, uy, KinE  ! Write azimuth angle in file
 
 ! Only gammas above kinetic threshold in water
-          if (abs(code).eq.1 .and. (KinE.lt.Eth_g)) goto 10
+          if (abs(code)==1 .and. (KinE<Eth_g)) goto 10
 ! Only e+, e- above kinetic threshold in water
-          if (abs(code).eq.2 .and. (KinE.lt.Kth_e)) goto 10
+          if (abs(code)==2 .and. (KinE<Kth_e)) goto 10
 ! Only mu+, mu- above kinetic threshold in water
-          if (abs(code).eq.3 .and. (KinE.lt.Kth_mu)) goto 10
+          if (abs(code)==3 .and. (KinE<Kth_mu)) goto 10
 
 c          write(*,*) code,KinE,r,zenp,phi,wei,ux,uy,uz,
 c     #               arrival_time
@@ -233,11 +233,11 @@ c     #               arrival_time
 ! ------------------------------
 ! End of shower
 ! ------------------------------
-      else if (irc.eq.2) then  ! End of shower record
+      else if (irc==2) then  ! End of shower record
 
         n=n+1
 
-        if (n.gt.nshowers)  goto 30
+        if (n>nshowers)  goto 30
         write(*,*) '--------------------------------------------'
         write(*,*) 'n=',n
 
@@ -308,8 +308,8 @@ c Number of bins in x and y
       nx=int(xsize/step)
       ny=int(ysize/step)
 
-      if (nx.gt.nxmax) write(*,*) "Warning: nx > ",nxmax
-      if (ny.gt.nymax) write(*,*) "Warning: ny > ",nymax
+      if (nx>nxmax) write(*,*) "Warning: nx > ",nxmax
+      if (ny>nymax) write(*,*) "Warning: ny > ",nymax
 
       xmin=-(step*nx)/2.
       xmax=(step*nx)/2.
@@ -403,16 +403,16 @@ c ###################################################################
 ! -----------------------------
 ! Particle and energy densities 
 ! -----------------------------
-         if ((xnew.lt.xmin).or.(xnew.gt.xmax)) then
+         if ((xnew<xmin).or.(xnew>xmax)) then
            n_out=n_out+wei
-           if (code.eq.1) e_out=e_out+KinE*wei
-           if (abs(code).eq.2) e_out=e_out+(KinE+xm_e)*wei
+           if (code==1) e_out=e_out+KinE*wei
+           if (abs(code)==2) e_out=e_out+(KinE+xm_e)*wei
            goto 111
          end if 
 
-         if ((ynew.lt.ymin).or.(ynew.gt.ymax)) then
+         if ((ynew<ymin).or.(ynew>ymax)) then
            n_out=n_out+wei
-           if (abs(code).eq.3) e_out=e_out+(KinE+xm_mu)*wei
+           if (abs(code)==3) e_out=e_out+(KinE+xm_mu)*wei
            goto 111
          end if 
 
@@ -421,15 +421,15 @@ c ###################################################################
          iy = int((ynew-ymin)/step)+1
 c         write(*,*) xnew,ynew,xmin,ymin,step,ix,iy,code,wei
 ! -------------------------------------------------------------------------
-      if ((abs(code).eq.1).or.(abs(code).eq.2)) then  ! Gammas, e+, e-
+      if ((abs(code)==1).or.(abs(code)==2)) then  ! Gammas, e+, e-
 
-         if (code.eq.1) then          ! photons 
+         if (code==1) then          ! photons
            E = KinE
            n_ph = n_ph + wei
            e_ph = e_ph + wei*E
          end if
 
-         if (abs(code).eq.2) then     ! e+, e-
+         if (abs(code)==2) then     ! e+, e-
            E = xm_e + KinE
            n_el = n_el + wei
            e_el = e_el + wei*E
@@ -437,7 +437,7 @@ c         write(*,*) xnew,ynew,xmin,ymin,step,ix,iy,code,wei
 
          w_em(ix,iy)=w_em(ix,iy)+wei   ! photons, e+, e-
 
-      else if (abs(code).eq.3) then     ! mu+, mu-
+      else if (abs(code)==3) then     ! mu+, mu-
 
          E = xm_mu + KinE
          n_mu = n_mu + wei

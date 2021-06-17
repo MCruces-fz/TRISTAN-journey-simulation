@@ -5,8 +5,7 @@ import json
 import os
 from os.path import join as join_path
 
-# Root Directory of the Project
-ROOT_DIR = os.path.abspath("../")
+from utils.constants import ROOT_DIR
 
 
 def grdpcles_dat(dir_path: str, dir_name: str, save_plots: bool = False, deg: bool = True):

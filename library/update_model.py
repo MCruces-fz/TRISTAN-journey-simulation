@@ -22,8 +22,7 @@ import json
 import os
 from os.path import join as join_path
 
-# Root Directory of the Project
-ROOT_DIR = os.path.abspath("../")
+from utils.constants import ROOT_DIR
 
 
 class CookModel:
@@ -33,7 +32,7 @@ class CookModel:
                  grd_temp: int = 300,
                  save_path=None):
 
-        with open("../utils/config.json", "r") as config_file:
+        with open("utils/config.json", "r") as config_file:
             configuration = json.load(config_file)
         self.config = configuration
 
@@ -52,7 +51,8 @@ class CookModel:
 
         self.save_model(save_path)
 
-    def set_height_units(self, h_list):
+    @staticmethod
+    def set_height_units(h_list):
         h_units = []
         for h in h_list:
             if h < 1:
@@ -62,7 +62,8 @@ class CookModel:
             h_units.append(hu)
         return h_units
 
-    def set_dens_list(self, inp_df):
+    @staticmethod
+    def set_dens_list(inp_df):
         d_list = ["MatchDefault   ",
                   inp_df["Dens-1"],
                   inp_df["Dens-2"],
@@ -72,7 +73,8 @@ class CookModel:
         # print(f"dlist= {d_list}")
         return d_list
 
-    def set_dens_units(self, dens_list):
+    @staticmethod
+    def set_dens_units(dens_list):
         dens_units = []
         for d in dens_list:
             if type(d) == str:

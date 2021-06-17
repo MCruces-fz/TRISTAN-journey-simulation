@@ -9,15 +9,14 @@ from library.update_model import CookModel
 from library.update_tables import CookTables
 from library.update_aires_input import CookAiresINP
 from library.represent import CookingDataAIRES, MergeData, Represent, grdpcles_dat
+from utils.constants import ROOT_DIR
+
 import json
 import os
 import sys
 from os.path import join as join_path
 import numpy as np
 import pandas as pd
-
-# Root Directory of the Project
-ROOT_DIR = os.path.abspath("./")
 
 # Add ROOT_DIR to $PATH
 if ROOT_DIR not in sys.path:
@@ -105,7 +104,7 @@ for row in input_df.iterrows():
 
     # Execute gfortran for uncompress .grdpcles data from bash
     os.system(f"cd {dir_path}; "
-              "gfortran -o grdpcles_map ../../grdpcles_reader.f -L${HOME}"
+              "gfortran -o grdpcles_map ../../utils/grdpcles_reader.f -L${HOME}"
               f"/aires/{config['AiresVersion']}/lib/ -lAires -lgfortran")
     os.system(f"cd {dir_path}; "
               "./grdpcles_map << XX1\n"
