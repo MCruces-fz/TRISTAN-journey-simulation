@@ -274,7 +274,7 @@ class Represent:
         self.col_titles = cook.col_titles
         self.data_frame = cook.data_frame
 
-        with open("../utils/config.json", "r") as config_file:
+        with open("utils/config.json", "r") as config_file:
             configuration = json.load(config_file)
         self.config = configuration
 
