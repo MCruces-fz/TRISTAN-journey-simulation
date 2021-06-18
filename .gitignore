@@ -34,6 +34,7 @@ __pycache__
 OUTPUT/
 SUMMARY/
 AiresINP/
+angles_distribution.txt
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
